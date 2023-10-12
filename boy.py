@@ -10,7 +10,7 @@ def space_down(e):
 
 def a_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_a
-def time_out_3(e):
+def time_out_5(e):
     return e[0] == 'TIME_OUT'
 
 
@@ -48,6 +48,8 @@ class AutoRun:
     @staticmethod
     def do(boy):
         boy.frame = (boy.frame + 1) % 8
+        if get_time() - boy.start_time > 5.0:
+            boy.state_machine.handle_event(('TIME_OUT', 0))
         if boy.x > 750 or boy.x < 50:
             boy.dir *= -1
             if boy.action == 0:
@@ -111,8 +113,7 @@ class Idle:
     @staticmethod
     def do(boy):
         boy.frame = (boy.frame + 1) % 8
-        if get_time() - boy.start_time > 3.0:
-            boy.state_machine.handle_event(('TIME_OUT', 0))
+
         print('Idle Do')
 
     @staticmethod
@@ -126,7 +127,7 @@ class StateMachine:
         self.boy = boy
         self.cur_state = Idle
         self.table = {
-            AutoRun: {right_down: Run, left_down: Run, right_up: Run, left_up: Run},
+            AutoRun: {right_down: Run, left_down: Run, right_up: Run, left_up: Run, time_out_5: Idle},
             Idle: {right_down: Run, left_down: Run, right_up: Run, left_up: Run, a_down: AutoRun},
             Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle}
         }
