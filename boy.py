@@ -33,22 +33,23 @@ class AutoRun:
 
     @staticmethod
     def enter(boy, e):
-        if right_down(e) or left_up(e):
-            boy.dir, boy.action = 1, 1
-        elif left_down(e) or right_up(e):
+        if boy.action == 0 or 2:
             boy.dir, boy.action = -1, 0
+        elif boy.action == 1 or 3:
+            boy.dir, boy.action = 1, 1
 
     @staticmethod
     def exit(boy, e):
-        boy.width += 5
-        boy.height += 5
+        boy.width, boy.height = 0, 0
+        boy.y = 90
         pass
 
     @staticmethod
     def do(boy):
         boy.frame = (boy.frame + 1) % 8
-        boy.width += 0.5
+        boy.x += boy.dir * 10
         boy.height += 0.5
+        boy.width += 0.5
         boy.y += 0.15
         pass
 
@@ -72,12 +73,14 @@ class Run:
     @staticmethod
     def do(boy):
         boy.frame = (boy.frame + 1) % 8
+        boy.x += boy.dir * 5
         pass
 
     @staticmethod
     def draw(boy):
         boy.image.clip_draw(boy.frame * 100, boy.action * 100, 100, 100, boy.x, boy.y)
         pass
+
 
 
 
@@ -116,9 +119,9 @@ class StateMachine:
         self.boy = boy
         self.cur_state = AutoRun
         self.table = {
+            AutoRun: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle},
             Idle: {right_down: Run, left_down: Run, right_up: Run, left_up: Run},
-            Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle},
-            AutoRun: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle}
+            Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle}
         }
 
     def start(self):
@@ -146,11 +149,12 @@ class Boy:
         self.x, self.y = 400, 90
         self.frame = 0
         self.action = 3
+        self.height = 0
+        self.width = 0
         self.image = load_image('animation_sheet.png')
         self.state_machine = StateMachine(self)
         self.state_machine.start()
-        self.width = 0
-        self.height = 0
+
     def update(self):
         self.state_machine.update()
 
