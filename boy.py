@@ -34,9 +34,9 @@ class AutoRun:
 
     @staticmethod
     def enter(boy, e):
-        if boy.action == 0 or 2:
+        if boy.action == 0 or boy.action == 2:
             boy.dir, boy.action = -1, 0
-        elif boy.action == 1 or 3:
+        elif boy.action == 1 or boy.action == 3:
             boy.dir, boy.action = 1, 1
 
     @staticmethod
