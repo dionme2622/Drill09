@@ -40,18 +40,21 @@ class AutoRun:
 
     @staticmethod
     def exit(boy, e):
-        pass
-
-    @staticmethod
-    def do(boy):
-        boy.frame = (boy.frame + 1) % 8
         boy.width += 5
         boy.height += 5
         pass
 
     @staticmethod
+    def do(boy):
+        boy.frame = (boy.frame + 1) % 8
+        boy.width += 0.5
+        boy.height += 0.5
+        boy.y += 0.15
+        pass
+
+    @staticmethod
     def draw(boy):
-        boy.image.clip_draw(boy.frame * 100, boy.action * 100, 100, 100, boy.x, boy.y, boy.width, boy.height)
+        boy.image.clip_draw(boy.frame * 100, boy.action * 100, 100, 100, boy.x, boy.y, 100 + boy.width, 100 + boy.height)
         pass
 class Run:
 
@@ -111,10 +114,11 @@ class Idle:
 class StateMachine:
     def __init__(self, boy):
         self.boy = boy
-        self.cur_state = Idle
+        self.cur_state = AutoRun
         self.table = {
             Idle: {right_down: Run, left_down: Run, right_up: Run, left_up: Run},
-            Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle}
+            Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle},
+            AutoRun: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle}
         }
 
     def start(self):
@@ -145,7 +149,8 @@ class Boy:
         self.image = load_image('animation_sheet.png')
         self.state_machine = StateMachine(self)
         self.state_machine.start()
-
+        self.width = 0
+        self.height = 0
     def update(self):
         self.state_machine.update()
 
