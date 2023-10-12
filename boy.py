@@ -47,6 +47,12 @@ class AutoRun:
     @staticmethod
     def do(boy):
         boy.frame = (boy.frame + 1) % 8
+        if boy.x > 750 or boy.x < 50:
+            boy.dir *= -1
+            if boy.action == 0:
+                boy.action = 1
+            elif boy.action == 1:
+                boy.action = 0
         boy.x += boy.dir * 10
         boy.height += 0.5
         boy.width += 0.5
