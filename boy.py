@@ -29,6 +29,30 @@ def left_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_LEFT
 
 
+class AutoRun:
+
+    @staticmethod
+    def enter(boy, e):
+        if right_down(e) or left_up(e):
+            boy.dir, boy.action = 1, 1
+        elif left_down(e) or right_up(e):
+            boy.dir, boy.action = -1, 0
+
+    @staticmethod
+    def exit(boy, e):
+        pass
+
+    @staticmethod
+    def do(boy):
+        boy.frame = (boy.frame + 1) % 8
+        boy.width += 5
+        boy.height += 5
+        pass
+
+    @staticmethod
+    def draw(boy):
+        boy.image.clip_draw(boy.frame * 100, boy.action * 100, 100, 100, boy.x, boy.y, boy.width, boy.height)
+        pass
 class Run:
 
     @staticmethod
@@ -45,7 +69,6 @@ class Run:
     @staticmethod
     def do(boy):
         boy.frame = (boy.frame + 1) % 8
-        boy.x += boy.dir * 5
         pass
 
     @staticmethod
