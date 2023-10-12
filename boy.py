@@ -126,7 +126,7 @@ class StateMachine:
         self.boy = boy
         self.cur_state = Idle
         self.table = {
-            AutoRun: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle},
+            AutoRun: {right_down: Run, left_down: Run, right_up: Run, left_up: Run},
             Idle: {right_down: Run, left_down: Run, right_up: Run, left_up: Run, a_down: AutoRun},
             Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle}
         }
